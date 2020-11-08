@@ -8,28 +8,54 @@ export default {
     },
   },
   mutations: {
-      setUser(state, payload) {
-          state.user.isAuthenticated = true
-          state.user.uid = payload
+    setUser(state, payload) {
+      state.user.isAuthenticated = true;
+      state.user.uid = payload;
+      },
+      unsetUser(state) {
+        state.user = {
+          isAuthenticated: false,
+          userId: null,
+        }
       }
   },
   actions: {
-      signUp({ commit }, payload) {
-        commit('setProcessing', true)
-        firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
-            .then(user => {
-                commit("setUser", user.uid)
-                commit("setProcessing", false);
-            })
-            .catch(function(error) {
-                commit("setProcessing", false)
-                commit("setError", error.message);
-            // var errorCode = error.code;
-            // var errorMessage = error.message;
-          });
+    signUp({ commit }, payload) {
+          commit("setProcessing", true);
+          commit('cleanError')
+      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+        .then(() => {
+          commit("setProcessing", false)
+        })
+        .catch(function(error) {
+          commit("setProcessing", false)
+          commit("setError", error.message)
+        });
+    },
+    
+    signIn({ commit }, payload) {
+        commit("setProcessing", true)
+        commit("cleanError");
+      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+        .then(() => {
+          commit("setProcessing", false)
+        })
+        .catch(function(error) {
+          commit("setProcessing", false)
+          commit("setError", error.message)
+        });
+      },
+    
+    stateChange({ commit }, payload) {
+      if(payload) {
+        commit("setUser", payload.uid) 
+      }
+      else {
+        commit("unsetUser")
+      }
     }
   },
   getters: {
-      isUserAuthenticated: (state) => state.user.isAuthenticated
-  }
+    isUserAuthenticated: (state) => state.user.isAuthenticated,
+  },
 };

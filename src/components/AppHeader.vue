@@ -54,8 +54,12 @@ export default {
     };
   },
   computed: {
+    isUserAuthenticated() {
+      return this.$store.getters.isUserAuthenticated
+    },
     menuItems() {
-      return [
+      return this.isUserAuthenticated ? 
+      [
         {
           icon: "visibility",
           title: " Читать",
@@ -68,13 +72,20 @@ export default {
         },
         {
           icon: "account_circle",
-          title: "Мой профиль",
+          title: "Мой кабинет",
           route: "/profile",
         },
         {
           icon: "exit_to_app",
           title: "Выйти",
           route: "/logout",
+        }
+      ] : 
+      [
+         {
+          icon: "visibility",
+          title: " Читать",
+          route: "/articles",
         },
         {
           icon: "input",
@@ -85,8 +96,8 @@ export default {
           icon: "lock_open",
           title: "Регистрация",
           route: "/signup",
-        },
-      ];
+        }
+      ]
     },
   },
 };
