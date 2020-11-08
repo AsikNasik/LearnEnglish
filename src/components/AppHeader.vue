@@ -35,10 +35,13 @@
             v-for="(item, i) in menuItems"
             :key="`menuItem${i}`"
             :to="item.route"
-            text
           >
             <v-icon left v-html="item.icon"></v-icon>
             {{ item.title }}
+          </v-btn>
+          <v-btn text @click.prevent="signOut" v-if="isUserAuthenticated">
+            <v-icon left>exit_to_app</v-icon>
+            Выйти
           </v-btn>
         </v-toolbar-items>
       </v-toolbar>
@@ -74,11 +77,6 @@ export default {
           icon: "account_circle",
           title: "Мой кабинет",
           route: "/profile",
-        },
-        {
-          icon: "exit_to_app",
-          title: "Выйти",
-          route: "/logout",
         }
       ] : 
       [
@@ -100,7 +98,16 @@ export default {
       ]
     },
   },
-};
+  methods: {
+    signOut() {
+      this.$confirm('Вы действительно хотите окончить сеанс изучения английского?').then(res => {
+        if(res){
+            this.$store.dispatch('signOut')
+        }
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

@@ -46,6 +46,10 @@ export default {
         });
       },
     
+    signOut() {
+      firebase.auth().signOut()  
+    },
+    
     stateChange({ commit }, payload) {
       if(payload) {
         commit("setUser", payload.uid) 

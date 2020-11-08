@@ -7,6 +7,7 @@ import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
 import Profile from "@/views/Profile.vue";
 import LogOut from "@/views/LogOut.vue";
+import Store from '../store/general'
 
 Vue.use(Router)
 
@@ -31,6 +32,7 @@ export default new Router({
       path: "/profile",
       name: "profile",
       component: Profile,
+      beforeEnter: AuthGuard
     },
     {
       path: "/logout",
@@ -50,3 +52,12 @@ export default new Router({
   ],
   mode: "history",
 });
+
+function AuthGuard(from, to, next) {
+  if(Store.getters.isUserAuthenticated) {
+    next()
+  }
+  else {
+    next('/signin')
+  }
+}

@@ -16,13 +16,14 @@
             >
             {{error}}
           </v-alert>
-            <v-form>
+            <v-form v-model="valid">
               <v-text-field
                 prepend-icon="person"
                 name="login"
                 label="Email"
                 type="email"
                 v-model="email"
+                :rules="emailRules"
                 required
               ></v-text-field>
               <v-text-field
@@ -32,13 +33,14 @@
                 label="Password"
                 type="password"
                 v-model="password"
+                :rules="passwordRules"
                 required
               ></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn dark @click.prevent="signin" :disabled="processing">Войти</v-btn>
+            <v-btn @click.prevent="signin" :disabled="processing || !valid" >Войти</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -51,7 +53,16 @@ export default {
     data() {
         return {
             email: null,
-            password: null
+            password: null,
+            valid: false,
+            emailRules: [
+              (v) => !!v || 'Пожалуйста введите email',
+              (v) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(v) || 'Неправильный email'
+            ],
+            passwordRules: [
+              (v) => !!v || 'Пожалуйста введите пароль',
+              (v) => (v && v.length >= 6) || 'Пароль слишком короткий - минимум 6 символов'
+            ]
         }
     },
     computed: {
