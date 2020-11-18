@@ -1,5 +1,18 @@
 <template>
     <div>
-        <h1>ARTICLES</h1>
+        <articles-list></articles-list>
     </div>
 </template>
+
+<script>
+import ArticlesList from '@/components/ArticlesList'
+export default {
+  components: {
+    ArticlesList,
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

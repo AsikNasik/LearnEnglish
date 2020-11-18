@@ -8,11 +8,11 @@ export default {
     },
   },
   mutations: {
-    setUser(state, payload) {
+    SET_USER(state, payload) {
       state.user.isAuthenticated = true;
       state.user.uid = payload;
       },
-      unsetUser(state) {
+      UNSET_USER(state) {
         state.user = {
           isAuthenticated: false,
           userId: null,
@@ -21,28 +21,28 @@ export default {
   },
   actions: {
     signUp({ commit }, payload) {
-          commit("setProcessing", true);
-          commit('cleanError')
+          commit("SET_PROCESSING", true);
+          commit('CLEAN_ERROR')
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then(() => {
-          commit("setProcessing", false)
+          commit("SET_PROCESSING", false);
         })
         .catch(function(error) {
-          commit("setProcessing", false)
-          commit("setError", error.message)
+          commit("SET_PROCESSING", false);
+          commit("SET_ERROR", error.message);
         });
     },
     
     signIn({ commit }, payload) {
-        commit("setProcessing", true)
-        commit("cleanError");
+        commit("SET_PROCESSING", true);
+        commit("CLEAN_ERROR");
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(() => {
-          commit("setProcessing", false)
+          commit("SET_PROCESSING", false);
         })
         .catch(function(error) {
-          commit("setProcessing", false)
-          commit("setError", error.message)
+          commit("SET_PROCESSING", false);
+          commit("SET_ERROR", error.message)
         });
       },
     
@@ -52,10 +52,10 @@ export default {
     
     stateChange({ commit }, payload) {
       if(payload) {
-        commit("setUser", payload.uid) 
+        commit("SET_USER", payload.uid) 
       }
       else {
-        commit("unsetUser")
+        commit("UNSET_USER")
       }
     }
   },

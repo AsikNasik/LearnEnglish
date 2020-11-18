@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '../views/Home.vue'
 import Articles from '@/views/Articles.vue'
+import Article from "@/views/Article.vue";
+import ArticlePart from "@/views/ArticlePart.vue";
 import Words from "@/views/Words.vue";
 import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
@@ -24,6 +26,18 @@ export default new Router({
       component: Articles,
     },
     {
+      path: "/article/:id",
+      name: "article",
+      props: true,
+      component: Article,
+    },
+    {
+      path: "/article/:articleId/part/:partId",
+      name: "articlePart",
+      props: true,
+      component: ArticlePart,
+    },
+    {
       path: "/words",
       name: "words",
       component: Words,
@@ -32,7 +46,7 @@ export default new Router({
       path: "/profile",
       name: "profile",
       component: Profile,
-      beforeEnter: AuthGuard
+      beforeEnter: AuthGuard,
     },
     {
       path: "/logout",
