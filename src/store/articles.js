@@ -51,7 +51,7 @@ export default {
           {
             id: "asdffdgs22",
             title: "Title 22",
-            youtube_id: "qqqqqqwwwwww22",
+            youtube_id: "u4DUmKFScvU",
           },
           {
             id: "asdffdgs33",
@@ -101,11 +101,11 @@ export default {
 
     articleParts: [
       {
-        articleID: "asdwererfg1234hjkl",
-        articlePartId: "asdffdgs4",
+        articleId: "asdfg1234hjkl",
+        articlePartId: "asdffdgs2",
         articleTitle: "Harry Potter Part 1",
-        partTitle: "Title 4",
-        youtube_id: "gdfsdas4",
+        partTitle: "Title 2",
+        youtube_id: "nf3EUJT9pjY",
         content: [
           {
             sentences: [

@@ -7,8 +7,11 @@ import 'vuetify/dist/vuetify.min.css'
 import VuetifyConfirm from 'vuetify-confirm'
 import firebaseConfig from './configs/firebase'
 import firebase from 'firebase'
+import VueYouTubeEmbed from 'vue-youtube-embed'
 
 Vue.config.productionTip = false
+
+Vue.use(VueYouTubeEmbed)
 
 Vue.use(VuetifyConfirm, {
   buttonTrueText: 'Да',
