@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import ArticlePartContent from '@/components/ArticlePartContent';
 import ArticlePartWords from '@/components/ArticlePartWords';
 
@@ -30,12 +31,29 @@ export default {
       required: true,
     },
   },
+  data () {
+    return {
+      part: null,
+    }
+  },
   computed: {
-    part () {
-      let value = this.$store.getters.getArticleParts
-        .find(item => item.articlePartId === this.partId)
-      return value
-    },
+    // part () {
+    //   let value = this.$store.getters.getArticleParts
+    //     .find(item => item.articlePartId === this.partId)
+    //   return value
+    // },
+  },
+  created () {
+    Vue.$db.collection('articleParts')
+      .where('articleId', '==', this.articleId)
+      .where('articlePartId', '==', this.partId)
+      .get()
+      .then(querySnaphot => {
+        querySnaphot.forEach(item => {
+          this.part = item.data()
+        })
+      })
+      .catch(error => console.error(error))
   },
   components: {
     ArticlePartContent,

@@ -7,6 +7,7 @@ import 'vuetify/dist/vuetify.min.css'
 import VuetifyConfirm from 'vuetify-confirm'
 import firebaseConfig from './configs/firebase'
 import firebase from 'firebase'
+import '@firebase/firestore'
 import VueYouTubeEmbed from 'vue-youtube-embed'
 
 Vue.config.productionTip = false
@@ -23,7 +24,13 @@ Vue.use(VuetifyConfirm, {
   property: '$confirm',
 })
 
-firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const db = firebaseApp.firestore()
+db.settings({
+  timestampsInSnapshots: true
+});
+
+Vue.$db = db
 
 new Vue({
   router,
@@ -35,5 +42,7 @@ new Vue({
     firebase.auth().onAuthStateChanged(function(user) {
       vm.$store.dispatch('stateChange', user)
     });
+
+    this.$store.dispatch('LOAD_ARTICLES')
   }
 }).$mount('#app')

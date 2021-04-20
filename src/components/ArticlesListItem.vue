@@ -5,7 +5,7 @@
         <v-flex xs4 md3>
           <v-img
             height="100"
-            src="https://img.discogs.com/UmkB_dGJcwM5WQNXVov_igKKTJw=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-4440180-1431278192-5389.jpeg.jpg"
+            :src="article.imageUrl"
           >
           </v-img>
           <div class="mt-3 text-center">
@@ -28,7 +28,7 @@
             </div>
           </v-card-text>
           <v-card-actions>
-            <v-rating
+            <!-- <v-rating
               v-model="article.rating"
               length="5"
               color="yellow"
@@ -40,7 +40,7 @@
             <div class="ml-2">
               <span>{{ article.rating }} </span>
               <span>({{ article.ratingCount }})</span>
-            </div>
+            </div> -->
             <v-spacer></v-spacer>
             <v-btn
               color="red"
@@ -59,7 +59,7 @@
           <v-flex xs4 md3>
             <v-img
               height="100"
-              src="https://img.discogs.com/UmkB_dGJcwM5WQNXVov_igKKTJw=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-4440180-1431278192-5389.jpeg.jpg"
+              :src="article.imageUrl"
             >
             </v-img>
           </v-flex>
@@ -91,7 +91,7 @@
         <v-layout row>
           <v-flex xs12>
             <v-card-actions>
-              <v-rating
+              <!-- <v-rating
                 v-model="article.rating"
                 length="5"
                 color="yellow"
@@ -103,7 +103,7 @@
               <div class="ml-2">
                 <span>{{ article.rating }} </span>
                 <span>({{ article.ratingCount }})</span>
-              </div>
+              </div> -->
               <v-spacer></v-spacer>
               <v-btn
                 color="red"
