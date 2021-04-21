@@ -42,7 +42,19 @@
               <span>({{ article.ratingCount }})</span>
             </div> -->
             <v-spacer></v-spacer>
-            <v-btn color="green" class="normal" text> Загрузить </v-btn>
+            <v-btn
+              v-if="canLoadArticle(article.id)"
+              color="green"
+              class="normal"
+              text
+              @click="loadArticle(article.id)"
+            > Загрузить </v-btn>
+
+            <div v-if="getUserDataArticle(article.id)">
+               <v-icon color="white">work_outline</v-icon>
+               Скачано {{ getArticlesAddedDate(article.id) }}
+            </div>
+  
           </v-card-actions>
         </v-flex>
       </v-layout>
@@ -98,7 +110,15 @@
                 <span>({{ article.ratingCount }})</span>
               </div> -->
               <v-spacer></v-spacer>
-              <v-btn color="green" class="normal" text> Загрузить </v-btn>
+              <v-btn
+                v-if="canLoadArticle(article.id)"
+                class="normal"
+                color="green"
+                text
+                @click="loadArticle(article.id)"
+              >
+                Загрузить
+              </v-btn>
             </v-card-actions>
           </v-flex>
         </v-layout>
@@ -108,7 +128,8 @@
 </template>
 
 <script>
-import * as articleHelper from "../helpers/article";
+import * as articleHelper from "../helpers/article"
+import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -117,8 +138,25 @@ export default {
       required: true,
     },
   },
+  computed: {
+    ...mapGetters(['isUserAuthenticated', 'userData', 'getProcessing']),
+  },
   methods: {
     getArticleLevel: articleHelper.getArticleLevel,
+    canLoadArticle (articleId) {
+      let article = this.getUserDataArticle(articleId)
+      return this.isUserAuthenticated && !this.getProcessing && !article
+    },
+    getUserDataArticle (articleId) {
+      return this.userData.articles[articleId]
+    },
+    loadArticle (articleId) {
+      this.$store.dispatch('ADD_USER_ARTICLE', articleId)
+    },
+    getArticlesAddedDate(articleId) {
+      let article = this.getUserDataArticle(articleId)
+      return article.addedDate.toLocaleDateString()
+    }
   },
 };
 </script>

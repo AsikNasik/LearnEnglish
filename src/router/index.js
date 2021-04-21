@@ -9,7 +9,7 @@ import SignIn from "@/views/SignIn.vue";
 import SignUp from "@/views/SignUp.vue";
 import Profile from "@/views/Profile.vue";
 import LogOut from "@/views/LogOut.vue";
-import Store from '../store/general'
+import Store from '../store/index'
 
 Vue.use(Router)
 
@@ -68,7 +68,7 @@ export default new Router({
 });
 
 function AuthGuard(from, to, next) {
-  if(Store.getters.isUserAuthenticated) {
+  if (Store.getters.isUserAuthenticated) {
     next()
   }
   else {

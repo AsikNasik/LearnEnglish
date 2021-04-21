@@ -4,23 +4,23 @@ export default {
   state: {
     user: {
       isAuthenticated: false,
-      userId: null,
+      uid: null,
     },
   },
   mutations: {
     SET_USER(state, payload) {
       state.user.isAuthenticated = true;
-      state.user.uid = payload;
+      state.user.uid = payload
       },
       UNSET_USER(state) {
         state.user = {
           isAuthenticated: false,
-          userId: null,
+          uid: null,
         }
       }
   },
   actions: {
-    signUp({ commit }, payload) {
+    SIGNUP({ commit }, payload) {
           commit("SET_PROCESSING", true);
           commit('CLEAN_ERROR')
       firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
@@ -33,7 +33,7 @@ export default {
         });
     },
     
-    signIn({ commit }, payload) {
+    SIGNIN({ commit }, payload) {
         commit("SET_PROCESSING", true);
         commit("CLEAN_ERROR");
       firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
@@ -46,13 +46,14 @@ export default {
         });
       },
     
-    signOut() {
+    SIGNOUT() {
       firebase.auth().signOut()  
     },
     
-    stateChange({ commit }, payload) {
-      if(payload) {
-        commit("SET_USER", payload.uid) 
+    STATE_CHANGE({ commit, dispatch }, payload) {
+      if (payload) {
+        commit("SET_USER", payload.uid)
+        dispatch("LOAD_USER_DATA", payload.uid) 
       }
       else {
         commit("UNSET_USER")
@@ -60,6 +61,7 @@ export default {
     }
   },
   getters: {
+    userId: (state) => state.user.uid,
     isUserAuthenticated: (state) => state.user.isAuthenticated,
   },
 };

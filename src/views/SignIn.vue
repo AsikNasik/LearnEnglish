@@ -85,26 +85,26 @@ export default {
   },
   computed: {
     error() {
-        return this.$store.getters.getError
+      return this.$store.getters.getError
     },
     processing() {
-        return this.$store.getters.getProcessing
+      return this.$store.getters.getProcessing
     },
     isUserAuthenticated() {
-        return this.$store.getters.isUserAuthenticated
+      return this.$store.getters.isUserAuthenticated
     }
   },
   watch: {
     isUserAuthenticated(val) {
       if(val === true)
       {
-          this.$router.push("/")
+        this.$router.push("/")
       }
     }
   },
   methods: {
     signin() {
-      this.$store.dispatch('signIn', {email: this.email, password: this.password})
+      this.$store.dispatch('SIGNIN', {email: this.email, password: this.password})
     }
   }
 }

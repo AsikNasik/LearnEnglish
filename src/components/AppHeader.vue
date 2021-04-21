@@ -86,11 +86,6 @@ export default {
           route: "/articles",
         },
         {
-          icon: "extension",
-          title: "Учить слова",
-          route: "/words",
-        },
-        {
           icon: "account_circle",
           title: "Мой кабинет",
           route: "/profile",
@@ -119,7 +114,7 @@ export default {
     signOut() {
       this.$confirm('Вы действительно хотите окончить сеанс изучения английского?').then(res => {
         if(res){
-            this.$store.dispatch('signOut')
+          this.$store.dispatch('SIGNOUT')
         }
       })
     }

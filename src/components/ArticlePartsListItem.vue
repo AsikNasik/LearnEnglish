@@ -14,6 +14,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
+          v-if="isUserArticleLoaded"
           color="red"
           class="normal"
           text
@@ -27,6 +28,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     part: {
@@ -35,6 +38,14 @@ export default {
     },
     articleId: {
       required: true,
+    },
+  },
+  computed: {
+    ...mapGetters(['isUserAuthenticated', 'userData', 'getProcessing']),
+    isUserArticleLoaded() {
+      return this.isUserAuthenticated &&
+        !this.getProcessing &&
+        !!this.userData.articles[this.articleId]
     },
   },
 };
