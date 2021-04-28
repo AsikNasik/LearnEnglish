@@ -34,7 +34,7 @@
             </v-flex>
             <v-flex xs12 sm10 offset-sm1>
               <article-part-words
-                :words="part.words"
+                :data="part.words"
               />
             </v-flex>
             <v-flex xs12 sm10 offset-sm1 class="text-center">
@@ -43,16 +43,18 @@
                 persistent
                 max-width="600px"
               >
-                <v-btn
-                  v-if="!finishedDate"
-                  slot="activator"
-                  color="success"
-                  dark
-                  @click="finishDialog = true"
-                >
-                  <v-icon>check</v-icon>
-                  Я закончил читать эту часть!
-                </v-btn>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-if="!finishedDate"
+                    v-on="on"
+                    color="success"
+                    dark
+                    @click="finishDialog = true"
+                  >
+                    <v-icon>check</v-icon>
+                    Я закончил читать эту часть!
+                  </v-btn>
+                </template>
 
                 <v-card>
                   <v-responsive>
@@ -85,7 +87,7 @@
                     <v-btn
                       color="primary"
                       dark
-                      flat
+                      text
                       @click.native="finishDialog = false"  
                     >
                       <v-icon>close</v-icon>
@@ -94,7 +96,7 @@
                     <v-btn
                       color="success"
                       dark
-                      flat
+                      text
                       @click.native="finishWork"  
                     >
                       <v-icon>check</v-icon>

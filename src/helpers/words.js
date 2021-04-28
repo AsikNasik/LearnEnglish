@@ -1,0 +1,1 @@
+// need to do (need to add the/a to firebase and add function to get full word)

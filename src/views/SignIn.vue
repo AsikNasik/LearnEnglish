@@ -28,7 +28,7 @@
 
             <v-form v-model="valid">
               <v-text-field
-                prepend-icon="person"
+                prepend-icon="email"
                 name="login"
                 label="Email"
                 type="email"
