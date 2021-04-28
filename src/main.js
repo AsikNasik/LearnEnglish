@@ -10,6 +10,7 @@ import firebase from 'firebase'
 import '@firebase/firestore'
 import VueYouTubeEmbed from 'vue-youtube-embed'
 import FormattedDate from './filters/formattedDate'
+import { createBus } from './eventBus/eventBus'
 
 Vue.config.productionTip = false
 
@@ -34,6 +35,8 @@ db.settings({
 });
 
 Vue.$db = db
+
+createBus()
 
 new Vue({
   router,

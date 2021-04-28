@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import { EventBus } from '../eventBus/eventBus'
 
 export default {
   state: {
@@ -86,7 +87,6 @@ export default {
         payload.password
       );
 
-      console.log(payload)
       commit("SET_PROCESSING", true);
       commit("CLEAN_ERROR");
 
@@ -99,6 +99,7 @@ export default {
               .then(() => {
                 commit("SET_USER_NAME", payload.newName);
                 commit("SET_PROCESSING", false);
+                EventBus.notify("user-profile-data-change");
               })
               .catch(function(error) {
                 commit("SET_PROCESSING", false);
@@ -111,6 +112,7 @@ export default {
               .then(() => {
                 commit("SET_USER_EMAIL", payload.newName);
                 commit("SET_PROCESSING", false);
+                EventBus.notify("user-profile-data-change");
               })
               .catch(function(error) {
                 commit("SET_PROCESSING", false);
@@ -122,6 +124,7 @@ export default {
               .updatePassword(payload.newPassword)
               .then(() => {
                 commit("SET_PROCESSING", false);
+                EventBus.notify("user-profile-data-change");
               })
               .catch(function(error) {
                 commit("SET_PROCESSING", false);

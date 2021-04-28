@@ -153,6 +153,14 @@ export default {
   computed: {
     ...mapGetters(["userName", "userEmail", "getProcessing", "getError"]),
   },
+  created () {
+    this.$bus.$on('user-profile-data-change', () => {
+      this.dialog = false
+    })
+  },
+  beforeDestroy () {
+    this.$bus.$off('user-profile-data-change')
+  },
   methods: {
     changeUserData() {
       this.$store.dispatch("CHANGE_USER_PROFILE_DATA", {
