@@ -1,6 +1,32 @@
 <template>
     <v-container grid-list-md v-if="part">
         <v-layout row wrap>
+            <v-flex xs12 sm10 offset-sm1 v-if="finishedDate">
+              <v-card>
+                <v-responsive>
+                  <v-img
+                    src="https://firebasestorage.googleapis.com/v0/b/english-6499f.appspot.com/o/done.jpg?alt=media&token=45442a48-0e44-4765-b0ed-6dcfc74879ca"
+                    max-width="200px"
+                  >
+                  </v-img>
+                </v-responsive>
+                <v-card-title primary-title>
+                  <div class="headline" >
+                    Вы закончили эту часть {{ finishedDate | formattedDate }}!
+                  </div>
+                </v-card-title>
+                <v-card-actions>
+                    <span>Ваша оценка</span>
+                    <v-rating
+                      v-model="savedRating"
+                      color="success"
+                      readonly
+                      large
+                    >
+                    </v-rating>
+                  </v-card-actions>
+              </v-card>
+            </v-flex>
             <v-flex xs12 sm10 offset-sm1>
               <article-part-content
                 :part="part"
@@ -10,6 +36,74 @@
               <article-part-words
                 :words="part.words"
               />
+            </v-flex>
+            <v-flex xs12 sm10 offset-sm1 class="text-center">
+              <v-dialog
+                v-model="finishDialog"
+                persistent
+                max-width="600px"
+              >
+                <v-btn
+                  v-if="!finishedDate"
+                  slot="activator"
+                  color="success"
+                  dark
+                  @click="finishDialog = true"
+                >
+                  <v-icon>check</v-icon>
+                  Я закончил читать эту часть!
+                </v-btn>
+
+                <v-card>
+                  <v-responsive>
+                    <v-img
+                      src="https://firebasestorage.googleapis.com/v0/b/english-6499f.appspot.com/o/done.jpg?alt=media&token=45442a48-0e44-4765-b0ed-6dcfc74879ca"
+                      max-width="200px"
+                    >
+                    </v-img>
+                  </v-responsive>
+
+                  <v-card-title primary-title>
+                    <div class="headline" >
+                      Вы закончили эту часть!
+                    </div>
+                  </v-card-title>
+
+                  <v-card-text>
+                    <span>Ваша оценка</span>
+                    <v-rating
+                      v-model="rating"
+                      color="success"
+                      half-increments
+                      large
+                    >
+                    </v-rating>
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary"
+                      dark
+                      flat
+                      @click.native="finishDialog = false"  
+                    >
+                      <v-icon>close</v-icon>
+                      Закрыть
+                    </v-btn>
+                    <v-btn
+                      color="success"
+                      dark
+                      flat
+                      @click.native="finishWork"  
+                    >
+                      <v-icon>check</v-icon>
+                        Закончить
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+
+              </v-dialog>
             </v-flex>
         </v-layout>
     </v-container>
@@ -34,14 +128,17 @@ export default {
   data () {
     return {
       part: null,
+      finishDialog: false,
+      rating: 0,
     }
   },
   computed: {
-    // part () {
-    //   let value = this.$store.getters.getArticleParts
-    //     .find(item => item.articlePartId === this.partId)
-    //   return value
-    // },
+    finishedDate () {
+      return this.$store.getters.userData.articles[this.articleId].parts[this.partId].finishedDate
+    },
+    savedRating () {
+      return this.$store.getters.userData.articles[this.articleId].parts[this.partId].rating
+    },
   },
   created () {
     Vue.$db.collection('articleParts')
@@ -53,7 +150,18 @@ export default {
           this.part = item.data()
         })
       })
+      .then(() => {
+        this.$store.dispatch('UPDATE_USER_ARTICLE_PART_STATS',
+          { articleId: this.articleId, partId: this.partId })
+      })
       .catch(error => console.error(error))
+  },
+  methods: {
+    finishWork () {
+      this.$store.dispatch('FINISH_USER_ARTICLE_PART',
+        { articleId: this.articleId, partId: this.partId, rating: this.rating })
+      this.finishDialog = false
+    }
   },
   components: {
     ArticlePartContent,

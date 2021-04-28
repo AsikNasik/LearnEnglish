@@ -52,7 +52,7 @@
 
             <div v-if="getUserDataArticle(article.id)">
                <v-icon color="white">work_outline</v-icon>
-               Скачано {{ getArticlesAddedDate(article.id) }}
+               Скачано {{ getArticlesAddedDate(article.id) | formattedDate}}
             </div>
   
           </v-card-actions>
@@ -155,7 +155,7 @@ export default {
     },
     getArticlesAddedDate(articleId) {
       let article = this.getUserDataArticle(articleId)
-      return article.addedDate.toLocaleDateString()
+      return article.addedDate
     }
   },
 };

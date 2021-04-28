@@ -16,6 +16,24 @@ export default {
     ADD_USER_ARTICLE (state, payload) {
       Vue.set(state.userData.articles, payload.articleId, payload.article)
     },
+    ADD_USER_ARTICLE_PART (state, payload) {
+      Vue.set(state.userData.articles[payload.articleId].parts,
+        payload.partId,
+      { addedDate: payload.timestamp })
+    },
+    UPDATE_USER_ARTICLE_PART_LAST_OPENED_DATE (state, payload) {
+      Vue.set(state.userData.articles[payload.articleId].parts[payload.partId],
+        'lastOpenedDate',
+        payload.timestamp )
+    },
+    UPDATE_USER_ARTICLE_PART_FINISH_INFO (state, payload) {
+      Vue.set(state.userData.articles[payload.articleId].parts[payload.partId],
+        'finishedDate',
+        payload.timestamp)
+      Vue.set(state.userData.articles[payload.articleId].parts[payload.partId],
+        'rating',
+        payload.rating )
+    },
   },
   actions: {
     LOAD_USER_DATA ({ commit }, payload) {
@@ -28,14 +46,6 @@ export default {
           if (!userData.articles) {
             userData.articles = {}
           }
-
-          for (let key in userData.articles) {
-            // eslint-disable-next-line no-prototype-builtins
-            if (userData.articles.hasOwnProperty(key)) {
-              userData.articles[key].addedDate =
-                userData.articles[key].addedDate.toDate()
-            }
-          }
         
           commit('SET_USER_DATA', userData)
           commit("SET_PROCESSING", false)
@@ -46,9 +56,7 @@ export default {
       },
       ADD_USER_ARTICLE ({ commit, getters }, payload) {
         commit("SET_PROCESSING", true)
-
         let userDataRef = Vue.$db.collection('userData').doc(getters.userId)
-
         let article = {
           addedDate: new Date(),
           parts: {},
@@ -66,7 +74,45 @@ export default {
         .catch(() => {
           commit("SET_PROCESSING", false)
         })
-      },
+    },
+    UPDATE_USER_ARTICLE_PART_STATS ({ commit, getters }, payload) {
+      let userDataRef = Vue.$db.collection('userData').doc(getters.userId)
+      let timestamp = new Date()
+
+      console.log('in update', getters.userData.articles[payload.articleId].parts[payload.partId])
+      console.log('in update !', !getters.userData.articles[payload.articleId].parts[payload.partId])
+      if (!getters.userData.articles[payload.articleId].parts[payload.partId]) {
+        console.log('in if in UPDATE_USER_ARTICLE_PART_STATS')
+        userDataRef.update({
+          [`articles.${payload.articleId}.parts.${payload.partId}.addedDate`] : timestamp
+        })
+        .then(() => {
+          commit('ADD_USER_ARTICLE_PART',
+            { articleId: payload.articleId, partId: payload.partId, timestamp: timestamp })
+        })
+      }
+
+      userDataRef.update({
+        [`articles.${payload.articleId}.parts.${payload.partId}.lastOpenedDate`] : timestamp
+      })
+      .then(() => {
+        commit('UPDATE_USER_ARTICLE_PART_LAST_OPENED_DATE',
+          { articleId: payload.articleId, partId: payload.partId, timestamp: timestamp })
+      })
+    },
+    FINISH_USER_ARTICLE_PART({ commit, getters }, payload) {
+      let userDataRef = Vue.$db.collection('userData').doc(getters.userId)
+      let timestamp = new Date()
+
+      userDataRef.update({
+        [`articles.${payload.articleId}.parts.${payload.partId}.finishedDate`] : timestamp,
+        [`articles.${payload.articleId}.parts.${payload.partId}.rating`] : payload.rating,
+      })
+      .then(() => {
+        commit('UPDATE_USER_ARTICLE_PART_FINISH_INFO',
+          { articleId: payload.articleId, partId: payload.partId, timestamp: timestamp, rating: payload.rating })
+      })
+    },
   },
   getters: {
     userData: (state) => state.userData

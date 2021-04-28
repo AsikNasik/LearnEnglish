@@ -13,6 +13,10 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
+        <div v-if="finishedDate" class="mr-2">
+          <v-icon dark>check</v-icon>
+          Прочитано {{ finishedDate | formattedDate }}
+        </div>
         <v-btn
           v-if="isUserArticleLoaded"
           color="red"
@@ -42,10 +46,20 @@ export default {
   },
   computed: {
     ...mapGetters(['isUserAuthenticated', 'userData', 'getProcessing']),
-    isUserArticleLoaded() {
+    isUserArticleLoaded () {
       return this.isUserAuthenticated &&
         !this.getProcessing &&
         !!this.userData.articles[this.articleId]
+    },
+    finishedDate () {
+      if (!this.isUserArticleLoaded) return false
+
+      let article = this.userData.articles[this.articleId]
+      if (article && article.parts[this.part.id]) {
+        return article.parts[this.part.id].finishedDate
+      }
+
+      return false
     },
   },
 };
